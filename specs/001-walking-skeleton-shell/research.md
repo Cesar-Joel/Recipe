@@ -28,7 +28,7 @@ Docs consulted for Expo SDK 58: tabs, static rendering/metadata, unit testing (d
 - **Decision**: Set `expo.name` to "Recipe" in `app.json` (phone label, web manifest). Set the browser tab title with `generateMetadata` (SDK 58) returning "Recipe" in the root layout; show "Recipe" as an on-screen heading line above each section title.
 - **Rationale**: `generateMetadata` writes the title into the page HTML before JavaScript runs. `slug` and `scheme` can stay `recetario` (internal identifiers, not shown to the user).
 - **Alternatives**: `<Head>` from `expo-router/head` (post-hydration only); editing `+html.tsx` (manual HTML).
-- **Open to verify**: confirm `generateMetadata` is supported from the root layout; fall back to a route-level export in each tab screen if not.
+- **Resolved**: `generateMetadata` is NOT applied from the root layout; it is exported from each of the three tab screens instead (verified: built HTML has `<title>Recipe</title>`). The not-found page is not covered by `generateMetadata` in static export, so it uses `<Head>` from `expo-router/head` (title set after load).
 
 ## R6. Web output mode
 - **Decision**: Change `web.output` from `"server"` to `"static"`.
