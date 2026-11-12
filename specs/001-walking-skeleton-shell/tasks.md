@@ -136,9 +136,9 @@ description: "Task list for the Walking Skeleton Shell feature"
 **Purpose**: Final cleanup across all stories
 
 - [X] T031 Run `npm run format` and re-run `npx expo lint`, `npx tsc --noEmit`, `npx jest`, and `npx expo-doctor` — all clean
-- [ ] T032 Walk through the whole [quickstart.md](./quickstart.md) once on phone and browser; confirm SC-001 to SC-006 from `spec.md`
-- [ ] T033 Confirm `npx expo start` launches without errors from a clean state (`npx expo start --clear`) so `main` stays runnable after merge (Principle II)
-- [ ] T034 Author reviews the plan's "New Concepts" table against the code; mark open items from `research.md` (breakpoint, `generateMetadata`, test file naming, app-icon assets) as resolved or tracked
+- [X] T032 Walk through the whole [quickstart.md](./quickstart.md) once on phone and browser; confirm SC-001 to SC-006 from `spec.md`
+- [X] T033 Confirm `npx expo start` launches without errors from a clean state (`npx expo start --clear`) so `main` stays runnable after merge (Principle II)
+- [X] T034 Author reviews the plan's "New Concepts" table against the code; mark open items from `research.md` (breakpoint, `generateMetadata`, test file naming, app-icon assets) as resolved or tracked
 
 ---
 
