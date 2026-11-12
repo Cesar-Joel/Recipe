@@ -11,7 +11,7 @@ Docs consulted for Expo SDK 58: tabs, static rendering/metadata, unit testing (d
 - **Decision**: Read window width with `useWindowDimensions`; at width >= 768 px put the tab bar on the left (`tabBarPosition: 'left'`, `tabBarVariant: 'material'`), otherwise at the bottom. Section content is centered with a max width of 640 px.
 - **Rationale**: Docs note the position is chosen in our own code. 768 px is a common tablet/desktop breakpoint; the hook also updates on live resize (FR-008). Max width prevents text spanning a wide window.
 - **Alternatives**: Always bottom bar (looks stretched on wide windows); always sidebar (wastes phone width); separate `.web.tsx` files (platform code not justified, Principle III).
-- **Open to verify in implementation**: sidebar rendering on web at >= 768 px; adjust breakpoint if it looks off.
+- **Resolved**: sidebar rendering on web at >= 768 px verified by the author on phone and browser; the 768 px breakpoint is kept (see the sidebar width follow-up below).
 - **Follow-up (questions #5)**: the library gives the sidebar a minimum width of 360 px (Material drawer default), too wide here. Override with `tabBarStyle: { width: SIDEBAR_WIDTH, minWidth: 0 }` (225 px) on wide windows. Alternative rejected: a user-resizable sidebar (no built-in support; needs hand-written drag code, mouse-only, against Principle IV).
 
 ## R3. Text-only tabs
@@ -38,7 +38,7 @@ Docs consulted for Expo SDK 58: tabs, static rendering/metadata, unit testing (d
 - **Decision**: Change `web.output` from `"server"` to `"static"`.
 - **Rationale**: Each fixed route gets its own HTML file, so reload and direct links work without a server; simpler to host later. No dynamic routes exist.
 - **Alternatives**: Keep `"server"` (needs a running server for the same result; unneeded complexity).
-- **Open to verify**: `npx expo start --web` behaves normally in either mode; confirm `+not-found` shows for unknown paths in dev.
+- **Resolved**: `npx expo start --web` runs normally with `"static"`; the dev server shows the not-found screen for unknown paths (HTTP 404, checked in the question session and by the author).
 
 ## R7. Light appearance only
 - **Decision**: Set `userInterfaceStyle` to `"light"`.
@@ -49,13 +49,13 @@ Docs consulted for Expo SDK 58: tabs, static rendering/metadata, unit testing (d
 - **Decision**: Delete the starter screen (`src/app/index.tsx`, replaced). Keep `ios.icon` and `assets/expo.icon`; they are app-icon assets (see flag below). Remove starter-only packages not imported anywhere in `src/` and not required by Expo Router (candidates: `@expo/ui`, `expo-glass-effect`, `expo-symbols`, `expo-image`, `expo-web-browser`, `expo-device`), verifying with `npx expo-doctor`, lint, typecheck, and a run on both platforms. Leave `example/` (gitignored) alone.
 - **Rationale**: Satisfies FR-009 and Principle IV; each unused package is one more thing to break.
 - **Alternatives**: Keep all packages "just in case" (violates YAGNI).
-- **Flag for the author**: the default app icon, splash image, and favicon in `assets/images/` are Expo's generic art. They are app-icon assets, not screen content, so this plan keeps them until a branding feature supplies replacements. Say so if you want them replaced in this feature.
+- **Flag for the author**: the default app icon, splash image, and favicon in `assets/images/` are Expo's generic art. They are app-icon assets, not screen content, so this plan keeps them until a branding feature supplies replacements. Say so if you want them replaced in this feature. **Tracked**: kept on purpose until a later branding feature replaces them.
 
 ## R9. Testing approach
 - **Decision**: Install `jest-expo`, `jest`, `@types/jest` as dev dependencies (`npx expo install ... --dev`); add `"jest": {"preset": "jest-expo"}` and a `test` script. One test file covers `src/lib/sections.ts`: exactly three sections in order, unique routes and names, non-empty descriptions that are a single sentence. Add `"jest"` to `tsconfig` types. Add `prettier` as a dev dependency per the constitution.
 - **Rationale**: The only non-UI logic is the section definitions, which tabs and screens both read, so a mistake there would break every screen. SDK 58 requires Jest 30 (`jest-expo` docs).
 - **Alternatives**: Component tests with React Native Testing Library (optional per constitution; not called out by this spec); end-to-end tools (heavy for a skeleton).
-- **Open to verify**: test file naming under the preset (docs mention `-test.ts`, default Jest also matches `.test.ts`); use whichever runs.
+- **Resolved**: `src/lib/__tests__/sections.test.ts` runs under the `jest-expo` preset (`.test.ts` is matched).
 
 ## R10. Single source of truth for section copy
 - **Decision**: `src/lib/sections.ts` exports an ordered list `{ key, name, route, description }`. Tab labels and screen text both read from it.
