@@ -83,7 +83,7 @@ written into the spec or plan before they are built (Phase 2, step 4).
 - A follow-up question **extends its item** instead of creating a new one.
 - If a question implies no changes, say so in the answer and log nothing.
 - If a change is really a new capability, log it under "Notes for future features" instead (see
-  Phase 2, step 9).
+  Phase 2, step 10).
 - End every answer with what you logged (or that there are no changes) and "Next question
   whenever you're ready."
 
