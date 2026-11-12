@@ -12,12 +12,14 @@ Docs consulted for Expo SDK 58: tabs, static rendering/metadata, unit testing (d
 - **Rationale**: Docs note the position is chosen in our own code. 768 px is a common tablet/desktop breakpoint; the hook also updates on live resize (FR-008). Max width prevents text spanning a wide window.
 - **Alternatives**: Always bottom bar (looks stretched on wide windows); always sidebar (wastes phone width); separate `.web.tsx` files (platform code not justified, Principle III).
 - **Open to verify in implementation**: sidebar rendering on web at >= 768 px; adjust breakpoint if it looks off.
+- **Follow-up (questions #5)**: the library gives the sidebar a minimum width of 360 px (Material drawer default), too wide here. Override with `tabBarStyle: { width: SIDEBAR_WIDTH, minWidth: 0 }` (225 px) on wide windows. Alternative rejected: a user-resizable sidebar (no built-in support; needs hand-written drag code, mouse-only, against Principle IV).
 
 ## R3. Text-only tabs
 - **Decision**: No icons; tab labels only.
 - **Rationale**: Docs' examples use `@expo/vector-icons`, which is not installed; icons are not required by the spec. Avoids a dependency (Principle IV).
 - **Alternatives**: `expo-symbols` (iOS-only, no web); adding an icon font (new dependency).
 - **Known limit (questions #3)**: `tabBarIcon: () => null` hides the icon but still reserves its slot. Below 768 px in portrait the default bar puts labels *below* the icon at font size 10 in a fixed 49 px bar, so labels render small and clipped (FR-008, SC-004). Fix, applied in US3 (T025): `tabBarLabelPosition: "beside-icon"` in `screenOptions`; if still clipped, `tabBarIconStyle: { display: "none" }`. Confirm option names in the SDK 58 docs.
+- **Follow-up (questions #4)**: `tabBarIcon: () => null` still renders the icon's box, and the beside-icon label keeps a 12 px end margin, so labels were off-center. Fix: keep the null icon, add `tabBarIconStyle: { display: "none" }` and `tabBarLabelStyle: { marginStart: 0, marginEnd: 0 }`.
 
 ## R4. Orientation lock
 - **Decision**: Keep `"orientation": "portrait"` in `app.json` (already set).

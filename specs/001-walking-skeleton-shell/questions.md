@@ -6,6 +6,12 @@
 - **#3 (clipped tab labels):** fold into US3 (tasks T025, T029, T030); do not fix before US2.
 - **#1:** documentation only; recorded in research R5.
 
+US3 checkpoint (2026-11-12):
+
+- **T029, T030:** confirmed passing by the author.
+- **#4 (icon slot / label centering):** remove the icon slot and the label margins.
+- **#5 (sidebar width):** a resizable sidebar is not built in and would need custom drag code (against Principle IV), so start with a fixed 200 px.
+
 ## Session 2026-11-12
 
 ### 1. Why `generateMetadata` does not apply to the not-found page (priority low)
@@ -70,3 +76,43 @@ the icon, which is why wide windows look fine.
 - **Notes:** this overlaps tasks T025/T029/T030 (US3, not started). Fold the fix into US3, or
   into a follow-up phase if the human wants it before US2.
 - **Human decision:** fold into US3 (decided 2026-11-12); fix as above.
+
+### 4. Tab labels are off-center because of the empty icon slot (priority low)
+
+Question: with `tabBarLabelPosition: "beside-icon"` the labels are not fully centered because of the
+icon's space; remove it. Answer: confirmed in `expo-router/build/react-navigation/bottom-tabs/views`.
+`tabBarIcon: () => null` is a function, so the tab bar still renders the icon wrapper (a fixed
+box) and `BottomTabItem` does not treat it as "no icon". In the beside-icon layout the label also
+keeps `marginEnd: 12` (`labelBeside`), so it sits off-center even without the icon.
+
+- **Source:** FR-008 (layout looks right at every width), research R3 (text-only tabs).
+- **Gap:** partial.
+- **src/app/(tabs)/_layout.tsx:38**: in `screenOptions` add `tabBarIconStyle: { display: "none" }`
+  (the planned fallback from item #3; the style is applied to the icon wrapper, so its box
+  disappears) and `tabBarLabelStyle: { marginStart: 0, marginEnd: 0 }` (the label style is applied
+  last, so it overrides the default margins). Keep `tabBarIcon: () => null` on each screen so no
+  placeholder icon appears. Confirm the option names in the SDK 58 docs.
+- **Artifacts to update:** research.md R3 (record that hiding the icon needs both a null icon and
+  a hidden wrapper); plan.md New Concepts (`tabBarIconStyle`, `tabBarLabelStyle`).
+- **Tests:** none (UI only). Add to quickstart Story 3 step 1: labels are centered in the bottom
+  bar (and left-aligned with even padding in the sidebar), with no gap where an icon would be.
+- **Human decision:** none; fix as above.
+
+### 5. Sidebar is too wide on wide browser windows (priority low)
+
+Question: at 768 px or wider the left sidebar is too wide; make it shorter. Answer: the library
+sets the sidebar's minimum width to 360 px, the Material drawer default
+(`getDefaultSidebarWidth` in `expo-router/build/react-navigation/elements`, applied as `minWidth`
+in `BottomTabBar.js`). `tabBarStyle` is the last entry of the bar's style list, so it can override
+it.
+
+- **Source:** FR-008, `contracts/routes.md` (wide window: bar on the left, content centered).
+- **Gap:** partial.
+- **src/app/(tabs)/_layout.tsx:34**: add a named constant `SIDEBAR_WIDTH = 200` and, on wide
+  windows only, `tabBarStyle: { width: SIDEBAR_WIDTH, minWidth: 0 }`. 200 px fits "Shopping List"
+  with the Material padding; adjust if it looks tight or loose.
+- **Artifacts to update:** research.md R2 (record the 360 px library default and the override);
+  plan.md New Concepts (`tabBarStyle`).
+- **Tests:** none (UI only). Add to quickstart Story 3 step 3: the sidebar is narrow (about 200 px)
+  and the content takes the rest.
+- **Human decision:** fixed 200 px (decided 2026-11-12). A resizable sidebar was asked about and rejected: no built-in support, custom drag code, web-only. The author tuned it to 225 px after testing.

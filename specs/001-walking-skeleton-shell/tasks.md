@@ -115,15 +115,15 @@ description: "Task list for the Walking Skeleton Shell feature"
 
 ### Implementation for User Story 3
 
-- [ ] T025 [US3] In `src/app/(tabs)/_layout.tsx` read the window width with `useWindowDimensions` (from `react-native`) and set `tabBarPosition: "left"` with `tabBarVariant: "material"` when width >= 768, otherwise `"bottom"` (research R2). Keep the 768 value as a named constant. If the sidebar looks wrong on web, adjust the breakpoint or variant and note why in a code comment. Add a first-use comment explaining `useWindowDimensions`. Confirm the exact option names (`tabBarPosition`, `tabBarVariant`) in the SDK 58 docs before coding; if a name differs, use the documented one and update research R2. (updated per questions #3) Also add `tabBarLabelPosition: "beside-icon"` to `screenOptions` so bottom-bar labels are not small and clipped below 768 px (FR-008, SC-004; research R3); if still clipped, add `tabBarIconStyle: { display: "none" }`; confirm option names in the SDK 58 docs and add a first-use comment
-- [ ] T026 [P] [US3] In `src/components/SectionScreen.tsx` constrain the content to a maximum width of 640 with `width: "100%"`, centered, with horizontal padding of at least 16, so text wraps at ~320 px, never causes horizontal scrolling, and is not stretched on wide windows (FR-008)
-- [ ] T027 [US3] Confirm `app.json` still has `"orientation": "portrait"` (FR-013); no code change is expected
+- [X] T025 [US3] In `src/app/(tabs)/_layout.tsx` read the window width with `useWindowDimensions` (from `react-native`) and set `tabBarPosition: "left"` with `tabBarVariant: "material"` when width >= 768, otherwise `"bottom"` (research R2). Keep the 768 value as a named constant. If the sidebar looks wrong on web, adjust the breakpoint or variant and note why in a code comment. Add a first-use comment explaining `useWindowDimensions`. Confirm the exact option names (`tabBarPosition`, `tabBarVariant`) in the SDK 58 docs before coding; if a name differs, use the documented one and update research R2. (updated per questions #3) Also add `tabBarLabelPosition: "beside-icon"` to `screenOptions` so bottom-bar labels are not small and clipped below 768 px (FR-008, SC-004; research R3); if still clipped, add `tabBarIconStyle: { display: "none" }`; confirm option names in the SDK 58 docs and add a first-use comment
+- [X] T026 [P] [US3] In `src/components/SectionScreen.tsx` constrain the content to a maximum width of 640 with `width: "100%"`, centered, with horizontal padding of at least 16, so text wraps at ~320 px, never causes horizontal scrolling, and is not stretched on wide windows (FR-008). (Already satisfied by the US1 implementation of `SectionScreen.tsx`: no change needed)
+- [X] T027 [US3] Confirm `app.json` still has `"orientation": "portrait"` (FR-013); no code change is expected
 
 ### Verification for User Story 3 (REQUIRED)
 
-- [ ] T028 [US3] Run `npx expo lint`, `npx tsc --noEmit`, and `npx jest` with no errors
-- [ ] T029 [US3] Manual check on phone (Expo Go) — quickstart "Story 3" steps 1–2: nothing clipped, no horizontal scroll, bar at the bottom, every tab label fully visible at a font size of 12 or larger (updated per questions #3), device rotation keeps the app in portrait; each tab is easy to tap with one thumb and is about 44 pt or larger (the default bottom bar normally satisfies this)
-- [ ] T030 [US3] Manual check in browser — quickstart "Story 3" steps 3–5: wide window shows left bar and centered content of limited width; resizing to ~320 px moves the bar to the bottom with nothing clipped and every tab label fully visible at ~320, 600 and 700 px, also in a mobile browser (updated per questions #3); reloading `/recipes` and `/shopping-list` shows the same section; `/nope` shows the not-found screen
+- [X] T028 [US3] Run `npx expo lint`, `npx tsc --noEmit`, and `npx jest` with no errors
+- [X] T029 [US3] Manual check on phone (Expo Go) — quickstart "Story 3" steps 1–2: nothing clipped, no horizontal scroll, bar at the bottom, every tab label fully visible at a font size of 12 or larger (updated per questions #3), device rotation keeps the app in portrait; each tab is easy to tap with one thumb and is about 44 pt or larger (the default bottom bar normally satisfies this)
+- [X] T030 [US3] Manual check in browser — quickstart "Story 3" steps 3–5: wide window shows left bar and centered content of limited width; resizing to ~320 px moves the bar to the bottom with nothing clipped and every tab label fully visible at ~320, 600 and 700 px, also in a mobile browser (updated per questions #3); reloading `/recipes` and `/shopping-list` shows the same section; `/nope` shows the not-found screen
 
 **Checkpoint**: All user stories independently functional
 
@@ -166,6 +166,7 @@ description: "Task list for the Walking Skeleton Shell feature"
 - US3: T026 can run alongside T025
 - Layout-file tasks (T012, T020, T021, T025) are sequential — same file
 - Phase 7 (Review Follow-up) depends only on US1 and edits `src/app/_layout.tsx`, which no other open task touches
+- Phase 8 (Review Follow-up) follows US3 and edits `src/app/(tabs)/_layout.tsx`; T038 runs before T039 (same file)
 
 ---
 
@@ -220,3 +221,21 @@ Task: "Create src/app/+not-found.tsx"
 **Checkpoint**: The not-found screen matches the route contract.
 
 **🛑 STOP**: `/speckit-implement` MUST stop here so the author can test the not-found screen before continuing
+
+---
+
+## Phase 8: Review Follow-up
+
+**Purpose**: Layout details found while testing User Story 3, decided on 2026-11-12 ([questions.md](./questions.md) #4 and #5). Both tasks edit the same file, so they run in order.
+
+- [X] T038 In `src/app/(tabs)/_layout.tsx` add `tabBarIconStyle: { display: "none" }` and `tabBarLabelStyle: { marginStart: 0, marginEnd: 0 }` to `screenOptions`, keeping `tabBarIcon: () => null` on each screen, so tab labels are centered with no empty icon space per FR-008 and research R3 (partial; questions #4). Confirm the option names in the SDK 58 docs and add a first-use comment
+- [X] T039 In `src/app/(tabs)/_layout.tsx` add the constant `SIDEBAR_WIDTH = 225` and, on wide windows only, `tabBarStyle: { width: SIDEBAR_WIDTH, minWidth: 0 }` so the sidebar is narrower than the library's 360 px default per FR-008 and `contracts/routes.md` (partial; questions #5). Add a first-use comment
+
+### Verification (REQUIRED)
+
+- [X] T040 Run `npx expo lint`, `npx tsc --noEmit`, and `npx jest` with no errors
+- [X] T041 Manual check on phone (Expo Go) and in browser — quickstart "Story 3" steps 1 and 3: labels are centered in the bottom bar with no gap, the bottom bar still shows every label fully, and the wide-window sidebar is about 225 px with the content taking the rest
+
+**Checkpoint**: The tab bar is centered at narrow widths and the sidebar is narrow at wide widths.
+
+**🛑 STOP**: `/speckit-implement` MUST stop here so the author can test the tab bar before continuing

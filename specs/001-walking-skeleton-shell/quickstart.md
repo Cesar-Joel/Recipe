@@ -39,8 +39,8 @@ Browser: click each section from every other; then press Tab until a nav entry i
 
 ## Manual checklist, Story 3: Layout on narrow and wide screens (P3)
 
-1. Phone: everything visible, no horizontal scroll, bar at the bottom, tap targets comfortable. Every tab label is fully visible at a font size of 12 or larger (also in a mobile browser, and in a desktop window at about 320, 600 and 700 px wide).
+1. Phone: everything visible, no horizontal scroll, bar at the bottom, tap targets comfortable. Every tab label is fully visible at a font size of 12 or larger (also in a mobile browser, and in a desktop window at about 320, 600 and 700 px wide). Labels are centered in their tab, with no gap where an icon would be.
 2. Phone: rotate the device; the app stays in portrait (FR-013).
-3. Browser full width: bar on the left, content centered with a limited width, not stretched.
+3. Browser full width: bar on the left and narrow (about 225 px), content centered with a limited width, not stretched.
 4. Resize the browser from wide to about 320 px and back: bar moves between left and bottom, nothing clipped or overlapping.
 5. Reload on `/recipes` and `/shopping-list`: the same section shows. Open `/nope`: friendly not-found screen with a link back to `/`.
