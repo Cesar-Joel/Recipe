@@ -30,7 +30,7 @@ Phone (Expo Go) and browser:
 2. Navigation shows Weekly Menu, Recipes, Shopping List.
 3. Each section shows "Recipe", its name, and exactly one descriptive sentence, and nothing else.
 4. Browser tab title is "Recipe"; the project shows as "Recipe" in Expo Go's project list (a real home-screen label needs a standalone build, out of scope).
-5. Browse every screen, including the not-found screen: no unrelated example content.
+5. Browse every screen, including the not-found screen: no unrelated example content. The not-found screen has no header bar (no "+not-found" title), only its message and the link back.
 
 ## Manual checklist, Story 2: Move between sections (P2)
 
@@ -39,7 +39,7 @@ Browser: click each section from every other; then press Tab until a nav entry i
 
 ## Manual checklist, Story 3: Layout on narrow and wide screens (P3)
 
-1. Phone: everything visible, no horizontal scroll, bar at the bottom, tap targets comfortable.
+1. Phone: everything visible, no horizontal scroll, bar at the bottom, tap targets comfortable. Every tab label is fully visible at a font size of 12 or larger (also in a mobile browser, and in a desktop window at about 320, 600 and 700 px wide).
 2. Phone: rotate the device; the app stays in portrait (FR-013).
 3. Browser full width: bar on the left, content centered with a limited width, not stretched.
 4. Resize the browser from wide to about 320 px and back: bar moves between left and bottom, nothing clipped or overlapping.

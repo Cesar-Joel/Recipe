@@ -17,6 +17,7 @@ Docs consulted for Expo SDK 58: tabs, static rendering/metadata, unit testing (d
 - **Decision**: No icons; tab labels only.
 - **Rationale**: Docs' examples use `@expo/vector-icons`, which is not installed; icons are not required by the spec. Avoids a dependency (Principle IV).
 - **Alternatives**: `expo-symbols` (iOS-only, no web); adding an icon font (new dependency).
+- **Known limit (questions #3)**: `tabBarIcon: () => null` hides the icon but still reserves its slot. Below 768 px in portrait the default bar puts labels *below* the icon at font size 10 in a fixed 49 px bar, so labels render small and clipped (FR-008, SC-004). Fix, applied in US3 (T025): `tabBarLabelPosition: "beside-icon"` in `screenOptions`; if still clipped, `tabBarIconStyle: { display: "none" }`. Confirm option names in the SDK 58 docs.
 
 ## R4. Orientation lock
 - **Decision**: Keep `"orientation": "portrait"` in `app.json` (already set).
@@ -29,6 +30,7 @@ Docs consulted for Expo SDK 58: tabs, static rendering/metadata, unit testing (d
 - **Rationale**: `generateMetadata` writes the title into the page HTML before JavaScript runs. `slug` and `scheme` can stay `recetario` (internal identifiers, not shown to the user).
 - **Alternatives**: `<Head>` from `expo-router/head` (post-hydration only); editing `+html.tsx` (manual HTML).
 - **Resolved**: `generateMetadata` is NOT applied from the root layout; it is exported from each of the three tab screens instead (verified: built HTML has `<title>Recipe</title>`). The not-found page is not covered by `generateMetadata` in static export, so it uses `<Head>` from `expo-router/head` (title set after load).
+- **Evidence (questions #1)**: the Expo docs only say metadata comes "from the matched route, not its layouts" and do not mention `+not-found`. Verified on SDK 58: `+not-found.html` has no `<title>` even when `generateMetadata` is exported from `src/app/+not-found.tsx`, and the dev server answers `/nope` with HTTP 404 and no `<title>`. On unknown addresses the tab shows the URL until JavaScript loads, then `<Head>` sets "Recipe". Re-check on the next SDK upgrade.
 
 ## R6. Web output mode
 - **Decision**: Change `web.output` from `"server"` to `"static"`.
@@ -62,3 +64,4 @@ Docs consulted for Expo SDK 58: tabs, static rendering/metadata, unit testing (d
 - **Decision**: `src/app/+not-found.tsx` with a short message and a `Link` to `/`.
 - **Rationale**: FR-011; link keeps a way back.
 - **Alternatives**: Redirect to Weekly Menu (hides mistakes; less clear).
+- **Header (questions #2)**: the root `Stack` shows a default header titled with the internal route name `+not-found`. Hide it with `<Stack.Screen name="+not-found" options={{ headerShown: false }} />`; the screen already carries its own message (a "Page not found" header would duplicate it).

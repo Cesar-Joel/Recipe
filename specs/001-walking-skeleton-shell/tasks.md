@@ -75,8 +75,8 @@ description: "Task list for the Walking Skeleton Shell feature"
 ### Verification for User Story 1 (REQUIRED)
 
 - [X] T017 [US1] Run `npx expo lint` and `npx tsc --noEmit` with no errors, and `npx jest` with all tests passing
-- [ ] T018 [US1] Manual check on phone (Expo Go) — quickstart "Story 1" steps 1–5 → the app opens on Weekly Menu, the three sections open, each shows only "Recipe", its name, one sentence; the project appears as "Recipe" in Expo Go's project list (Expo Go has no per-app home-screen label; the real label is set by `expo.name` for future builds); no starter content
-- [ ] T019 [US1] Manual check in browser (`npx expo start --web`) — quickstart "Story 1" steps 1–5 → same result; tab title is "Recipe"; open `/nope` → friendly not-found screen with a working link back
+- [X] T018 [US1] Manual check on phone (Expo Go) — quickstart "Story 1" steps 1–5 → the app opens on Weekly Menu, the three sections open, each shows only "Recipe", its name, one sentence; the project appears as "Recipe" in Expo Go's project list (Expo Go has no per-app home-screen label; the real label is set by `expo.name` for future builds); no starter content
+- [X] T019 [US1] Manual check in browser (`npx expo start --web`) — quickstart "Story 1" steps 1–5 → same result; tab title is "Recipe"; after T035, open `/nope` → friendly not-found screen with a working link back
 
 **Checkpoint**: User Story 1 is fully functional and testable on its own (this is the MVP)
 
@@ -115,15 +115,15 @@ description: "Task list for the Walking Skeleton Shell feature"
 
 ### Implementation for User Story 3
 
-- [ ] T025 [US3] In `src/app/(tabs)/_layout.tsx` read the window width with `useWindowDimensions` (from `react-native`) and set `tabBarPosition: "left"` with `tabBarVariant: "material"` when width >= 768, otherwise `"bottom"` (research R2). Keep the 768 value as a named constant. If the sidebar looks wrong on web, adjust the breakpoint or variant and note why in a code comment. Add a first-use comment explaining `useWindowDimensions`. Confirm the exact option names (`tabBarPosition`, `tabBarVariant`) in the SDK 58 docs before coding; if a name differs, use the documented one and update research R2
+- [ ] T025 [US3] In `src/app/(tabs)/_layout.tsx` read the window width with `useWindowDimensions` (from `react-native`) and set `tabBarPosition: "left"` with `tabBarVariant: "material"` when width >= 768, otherwise `"bottom"` (research R2). Keep the 768 value as a named constant. If the sidebar looks wrong on web, adjust the breakpoint or variant and note why in a code comment. Add a first-use comment explaining `useWindowDimensions`. Confirm the exact option names (`tabBarPosition`, `tabBarVariant`) in the SDK 58 docs before coding; if a name differs, use the documented one and update research R2. (updated per questions #3) Also add `tabBarLabelPosition: "beside-icon"` to `screenOptions` so bottom-bar labels are not small and clipped below 768 px (FR-008, SC-004; research R3); if still clipped, add `tabBarIconStyle: { display: "none" }`; confirm option names in the SDK 58 docs and add a first-use comment
 - [ ] T026 [P] [US3] In `src/components/SectionScreen.tsx` constrain the content to a maximum width of 640 with `width: "100%"`, centered, with horizontal padding of at least 16, so text wraps at ~320 px, never causes horizontal scrolling, and is not stretched on wide windows (FR-008)
 - [ ] T027 [US3] Confirm `app.json` still has `"orientation": "portrait"` (FR-013); no code change is expected
 
 ### Verification for User Story 3 (REQUIRED)
 
 - [ ] T028 [US3] Run `npx expo lint`, `npx tsc --noEmit`, and `npx jest` with no errors
-- [ ] T029 [US3] Manual check on phone (Expo Go) — quickstart "Story 3" steps 1–2: nothing clipped, no horizontal scroll, bar at the bottom, device rotation keeps the app in portrait; each tab is easy to tap with one thumb and is about 44 pt or larger (the default bottom bar normally satisfies this)
-- [ ] T030 [US3] Manual check in browser — quickstart "Story 3" steps 3–5: wide window shows left bar and centered content of limited width; resizing to ~320 px moves the bar to the bottom with nothing clipped; reloading `/recipes` and `/shopping-list` shows the same section; `/nope` shows the not-found screen
+- [ ] T029 [US3] Manual check on phone (Expo Go) — quickstart "Story 3" steps 1–2: nothing clipped, no horizontal scroll, bar at the bottom, every tab label fully visible at a font size of 12 or larger (updated per questions #3), device rotation keeps the app in portrait; each tab is easy to tap with one thumb and is about 44 pt or larger (the default bottom bar normally satisfies this)
+- [ ] T030 [US3] Manual check in browser — quickstart "Story 3" steps 3–5: wide window shows left bar and centered content of limited width; resizing to ~320 px moves the bar to the bottom with nothing clipped and every tab label fully visible at ~320, 600 and 700 px, also in a mobile browser (updated per questions #3); reloading `/recipes` and `/shopping-list` shows the same section; `/nope` shows the not-found screen
 
 **Checkpoint**: All user stories independently functional
 
@@ -165,6 +165,7 @@ description: "Task list for the Walking Skeleton Shell feature"
 - US1: T009, T010, T011, T015 (different files)
 - US3: T026 can run alongside T025
 - Layout-file tasks (T012, T020, T021, T025) are sequential — same file
+- Phase 7 (Review Follow-up) depends only on US1 and edits `src/app/_layout.tsx`, which no other open task touches
 
 ---
 
@@ -202,3 +203,20 @@ Task: "Create src/app/+not-found.tsx"
 - Commit after each task or small group of related tasks (one commit per task is fine)
 - A story is done only when lint + type check pass, unit tests pass, the manual phone + browser checklist passes, and the author has reviewed the plan's "New Concepts"
 - Avoid: editing the layout file from two tasks at once, adding icon libraries, platform-specific files
+
+---
+
+## Phase 7: Review Follow-up
+
+**Purpose**: Changes decided in the question session of 2026-11-12 ([questions.md](./questions.md)).
+
+- [X] T035 In `src/app/_layout.tsx` add `<Stack.Screen name="+not-found" options={{ headerShown: false }} />` inside the root `Stack`, so the not-found screen shows no header titled "+not-found" per FR-011 and `contracts/routes.md` (contradicts; questions #2). Add a short comment saying the screen already carries its own message
+
+### Verification (REQUIRED)
+
+- [X] T036 Run `npx expo lint`, `npx tsc --noEmit`, and `npx jest` with no errors
+- [X] T037 Manual check on phone (Expo Go) and in browser (`/nope`) — quickstart "Story 1" step 5: the not-found screen shows only its message and the link back to Weekly Menu, with no header bar; the link works
+
+**Checkpoint**: The not-found screen matches the route contract.
+
+**🛑 STOP**: `/speckit-implement` MUST stop here so the author can test the not-found screen before continuing
