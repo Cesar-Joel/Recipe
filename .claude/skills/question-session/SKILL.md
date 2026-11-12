@@ -1,6 +1,6 @@
 ---
 name: question-session
-description: Human question session about a Spec Kit feature's code (usually after reviewing it). Answer without implementing anything and log the resulting changes in the feature's questions.md. Only when the human says they are done, collect their decisions, carry them into spec.md/plan.md/tasks.md, and apply them through /speckit-analyze and /speckit-implement. Use when the human says they will ask questions or raise doubts about the code, or that they are going to review a feature.
+description: Human question session about a Spec Kit feature's code (usually after reviewing it). Answer without implementing anything and log the resulting changes in the feature's questions.md. Only when the human says they are done, collect their decisions, carry them into spec.md/plan.md/tasks.md, and apply them through /speckit-analyze and /speckit-implement. Use when the human says they will ask questions or raise doubts about the code, or that they are going to review a feature. Also run it automatically every time /speckit-implement stops at a 🛑 STOP checkpoint for manual testing, so the human can ask questions while testing.
 argument-hint: "[feature directory, e.g. specs/001-walking-skeleton-shell]"
 compatibility: "Requires spec-kit project structure with .specify/ directory"
 ---
@@ -15,6 +15,23 @@ nothing gets implemented.**
 - The project constitution (`.specify/memory/constitution.md`) governs every answer and every
   change. A proposal that breaks a MUST principle is never logged as a plain change (see Phase 2,
   step 2).
+
+## When this skill runs
+
+- **On request:** the human says they will ask questions or review a feature.
+- **Automatically at every manual-testing stop:** each time `/speckit-implement` stops at a
+  `🛑 STOP` checkpoint (end of a user story, or of a follow-up phase), open a session for that
+  feature **without waiting to be asked**, then do this once:
+  1. Say in a few lines what was just built and which manual-check tasks are waiting (task IDs
+     and the matching quickstart steps).
+  2. Tell the human to test it and to bring any question or doubt, and that nothing else is
+     implemented until they say they are done. If they have nothing to ask, they report the
+     manual-test results.
+  3. Do not start the next phase or story on your own. The checkpoint ends only when the human
+     says they are done.
+- If a session is already open (for example `/speckit-implement` stopped at a checkpoint during
+  Phase 2 of this same session), do not open a second one. Continue the current session with
+  step 1 above.
 
 ## Setup — resolve the feature
 
@@ -97,11 +114,17 @@ written into the spec or plan before they are built (Phase 2, step 4).
   `/speckit-constitution`), or install packages.
 - ❌ Ask for decisions with `AskUserQuestion` mid-session. Log them in their item and ask them all
   together at the end, unless the human asks to decide on the spot.
-- ❌ Change any checkbox in `tasks.md` or in `checklists/`.
+- ❌ Change any checkbox in `checklists/`, or in `tasks.md`, with one exception: when the human
+  confirms that a manual-check task passed (phone or browser), mark that task `[X]`. Nothing
+  else is ticked in Phase 1, and a task the human reports as failing stays open (log the failure
+  as an item).
 
 ## Phase 2 — When the human says they are done
 
 Phase 2 starts only when the human says so explicitly ("done", "that's all", "go implement").
+At a manual-testing stop, "done" after a clean test means: close the confirmed manual tasks, then
+carry on with the next phase or story only if the human asks for it. If nothing was logged,
+skip steps 1–7 and go straight to the next `/speckit-implement` run.
 
 1. **Decisions.** Collect every open decision in `questions.md`, plus any item still marked
    "Open to verify" in `research.md` that the session touched. Ask them in as few
