@@ -92,14 +92,14 @@ description: "Task list for the Walking Skeleton Shell feature"
 
 ### Implementation for User Story 2
 
-- [ ] T020 [US2] In `src/app/(tabs)/_layout.tsx` add `screenOptions` to `Tabs` so the active tab is clearly distinct from inactive ones: a strong `tabBarActiveTintColor` versus a muted `tabBarInactiveTintColor` (both sufficiently contrasted on the light background), and a bold active label via `tabBarLabelStyle`/equivalent. Give each `Tabs.Screen` a `tabBarAccessibilityLabel` equal to the section name (FR-007)
-- [ ] T021 [US2] In the browser, press Tab to focus each navigation entry. If no clear focus outline is visible, add one using documented React Navigation/React Native Web options in `src/app/(tabs)/_layout.tsx`, without adding a dependency or platform-specific files (FR-006). If the default outline is already clear, make no change and note it in the commit message
+- [X] T020 [US2] In `src/app/(tabs)/_layout.tsx` add `screenOptions` to `Tabs` so the active tab is clearly distinct from inactive ones: a strong `tabBarActiveTintColor` versus a muted `tabBarInactiveTintColor` (both sufficiently contrasted on the light background), and a bold active label via `tabBarLabelStyle`/equivalent. Give each `Tabs.Screen` a `tabBarAccessibilityLabel` equal to the section name (FR-007). (Implemented as active color + light background tint, because `tabBarLabelStyle` cannot style only the active label)
+- [X] T021 [US2] In the browser, press Tab to focus each navigation entry. If no clear focus outline is visible, add one using documented React Navigation/React Native Web options in `src/app/(tabs)/_layout.tsx`, without adding a dependency or platform-specific files (FR-006). If the default outline is already clear, make no change and note it in the commit message. (Default browser focus outline checked by the author: clear, no change made)
 
 ### Verification for User Story 2 (REQUIRED)
 
-- [ ] T022 [US2] Run `npx expo lint`, `npx tsc --noEmit`, and `npx jest` with no errors
-- [ ] T023 [US2] Manual check on phone (Expo Go) — quickstart "Story 2": tap every section from every other → each opens in one tap and the current tab is highlighted
-- [ ] T024 [US2] Manual check in browser — quickstart "Story 2": click every section from every other; then using only Tab, Enter/Space reach and activate all three with a visible focus outline → each opens
+- [X] T022 [US2] Run `npx expo lint`, `npx tsc --noEmit`, and `npx jest` with no errors
+- [X] T023 [US2] Manual check on phone (Expo Go) — quickstart "Story 2": tap every section from every other → each opens in one tap and the current tab is highlighted
+- [X] T024 [US2] Manual check in browser — quickstart "Story 2": click every section from every other; then using only Tab, Enter/Space reach and activate all three with a visible focus outline → each opens
 
 **Checkpoint**: User Stories 1 AND 2 work independently
 
